@@ -1,0 +1,15 @@
+@import "tailwindcss";
+#root{
+  font-family: 'Inter',sans-serif;
+  font-optical-sizing: auto;
+  font-style: normal;
+}
+
+:root {
+  --Rabit-red: #ea2e0e;
+  
+}
+@theme {
+  --color-Rabit-red: var(--Rabit-red);
+  
+}
