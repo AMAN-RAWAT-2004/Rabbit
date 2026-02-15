@@ -1,15 +1,13 @@
 import { createAsyncThunk,createSlice } from "@reduxjs/toolkit";
 import axios from "axios";
 
-const API_URL=`${import.meta.env.VITE_BACKEND_URL}`
-const USER_TOKEN=`Bearer ${localStorage.getItem('userToken')}`
 
 // ASYNCTHUNK TO FETCH ADMIN PRODUCTS 
 
 export const fetchAdminProducts=createAsyncThunk('adminProducts/fetchAdminProducts',async()=>{
-    const response=await axios.get(`${API_URL}/api/admin/products`,{
+    const response=await axios.get(`${import.meta.env.VITE_BACKEND_URL}/api/admin/products`,{
         headers:{
-                Authorization:USER_TOKEN,
+                Authorization:`Bearer ${localStorage.getItem('userToken')}`,
             },
     })
     return response.data;
@@ -18,9 +16,9 @@ export const fetchAdminProducts=createAsyncThunk('adminProducts/fetchAdminProduc
 // ASYNCTHUNK TO create a new  PRODUCT
 
 export const createProduct=createAsyncThunk('adminProducts/createProduct',async(productData)=>{
-    const response=await axios.post(`${API_URL}/api/admin/products`,productData,{
+    const response=await axios.post(`${import.meta.env.VITE_BACKEND_URL}/api/admin/products`,productData,{
         headers:{
-                Authorization:USER_TOKEN,
+                Authorization:`Bearer ${localStorage.getItem('userToken')}`,
             },
     })
     return response.data;
@@ -29,9 +27,9 @@ export const createProduct=createAsyncThunk('adminProducts/createProduct',async(
 // ASYNCTHUNK TO update a existing  PRODUCT
 
 export const updateProduct=createAsyncThunk('adminProducts/updateProduct',async({id,productData})=>{
-    const response=await axios.put(`${API_URL}/api/products/${id}`,productData,{
+    const response=await axios.put(`${import.meta.env.VITE_BACKEND_URL}/api/products/${id}`,productData,{
         headers:{
-                Authorization:USER_TOKEN,
+                Authorization:`Bearer ${localStorage.getItem('userToken')}`,
             },
     })
     return response.data;
@@ -39,9 +37,9 @@ export const updateProduct=createAsyncThunk('adminProducts/updateProduct',async(
 
 // ASYNCTHUNK TO delete a existing  PRODUCT
 export const deleteProduct=createAsyncThunk('adminProducts/deleteProduct',async(id)=>{
-    await axios.delete(`${API_URL}/api/products/${id}`,{
+    await axios.delete(`${import.meta.env.VITE_BACKEND_URL}/api/products/${id}`,{
         headers:{
-                Authorization:USER_TOKEN,
+                Authorization:`Bearer ${localStorage.getItem('userToken')}`,
             },
     })
     return id;
@@ -62,7 +60,7 @@ const adminProductSlice=createSlice({
             state.loading=false;
             state.products=action.payload;
         }).addCase(fetchAdminProducts.rejected,(state,action)=>{
-            state.loading=true;
+            state.loading=false;
             state.error=action.error.message;
         }).addCase(createProduct.fulfilled,(state,action)=>{
             state.products.push(action.payload);
@@ -77,4 +75,4 @@ const adminProductSlice=createSlice({
     }
 })
 
-export default adminProductSlice.reducer
+export default adminProductSlice.reducer;
