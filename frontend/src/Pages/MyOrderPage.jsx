@@ -50,8 +50,8 @@ const MyOrderPage = () => {
 
                                 </td>
                                 <td className='py-2 px-2 sm:px-4 sm:py-4'>
-                                    {new Date(order.createAt).toLocaleDateString()}{' '}
-                                    {new Date(order.createAt).toLocaleTimeString()}
+                                    {new Date(order.createdAt).toLocaleDateString()}{' '}
+                                    {new Date(order.createdAt).toLocaleTimeString()}
                                 </td>
                                 <td className='py-2 px-2 sm:px-4 sm:py-4'>
                                     {order.shippingAddress ? `${order.shippingAddress.city}, ${order.shippingAddress.country}`:`N/A` }
