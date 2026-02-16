@@ -10,7 +10,7 @@ const Login = () => {
     const dispatch=useDispatch();
     const navigate=useNavigate()
     const location=useLocation();
-    const {user,guestId,loading}=useSelector((state)=>state.auth)
+    const {user,guestId,loading,error}=useSelector((state)=>state.auth)
     const {cart}=useSelector((state)=>state.cart)
 
       const redirect=new URLSearchParams(location.search).get("redirect")||"/";
@@ -52,7 +52,13 @@ const Login = () => {
             <label className="block text-sm mb-2 font-semibold">Password</label>
             <input type="password" value={password} onChange={(e)=>setPassword(e.target.value)} className='w-full p-2 border rounded' placeholder='Enter your password' />
         </div>
+        
         <button type='submit' className='w-full bg-black text-white p-2 rounded-lg font-semibold hover:bg-gray-800 transition'> {loading?"loading...":"Sign In"}</button>
+        {error && (
+  <p className="text-red-500 text-sm mt-3 text-center font-medium">
+    {error}
+  </p>
+)}
         <p className="text-sm text-center mt-6">
             Don't have an account?{' '}
             <Link to={`/register?redirect=${encodeURIComponent(redirect)}` }className='text-blue-500'>
