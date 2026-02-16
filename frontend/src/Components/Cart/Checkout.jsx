@@ -2,6 +2,7 @@ import React, { useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
 import PaypalButton from "./PaypalButton";
 import { useDispatch, useSelector } from "react-redux";
+import { Link } from "react-router-dom";
 import {createCheckout} from '../../redux/Slice/checkoutSlice'
 import axios from "axios";
 
@@ -41,9 +42,11 @@ const Checkout = () => {
     }
 
 }
- const handlePaymentSuccess=async(details)=>{
+
+
+ const handlePaymentSuccess=async()=>{
     try {
-      const response=await axios.put(`${import.meta.env.VITE_BACKEND_URL}/api/checkout/${checkoutId}/pay`,{paymentStatus:"paid",paymentDetails:details},{
+      await axios.put(`${import.meta.env.VITE_BACKEND_URL}/api/checkout/${checkoutId}/pay`,{paymentStatus:"paid",paymentDetails:'Demo Details'},{
         headers:{
           Authorization:`Bearer ${localStorage.getItem("userToken")} `
         }
@@ -58,13 +61,13 @@ const Checkout = () => {
 }
 const handleFinalizeCheckout=async(checkoutId)=>{
   try{
-      const response=await axios.post(`${import.meta.env.VITE_BACKEND_URL}/api/checkout/${checkoutId}/finalize`,{
+      await axios.post(`${import.meta.env.VITE_BACKEND_URL}/api/checkout/${checkoutId}/finalize`,{},{
         headers:{
           Authorization:`Bearer ${localStorage.getItem("userToken")} `
         }
       })
-      
-        navigate("/order-confirmation")
+      navigate("/order-confirmation")
+     
      
     }catch(error){
         console.error(error);
@@ -208,10 +211,13 @@ const handleFinalizeCheckout=async(checkoutId)=>{
                 {!checkoutId ? (
                     <button type="submit" className="w-full bg-black text-white py-3 rounded">Continue to Payment</button>
                 ) : (
-                    <div className="">
+                    <div className="w-full h-20">
                         <h3 className="text-lg mb-4">Pay with Paypal</h3>
-                        <PaypalButton amount={cart.totalPrice} onSuccess={handlePaymentSuccess}
-                        onError={(err)=>alert('Payment failed. Try again.',err)} />
+                        {/* <PaypalButton amount={cart.totalPrice} onSuccess={handlePaymentSuccess}
+                        onError={(err)=>alert('Payment failed. Try again.',err)} /> */}
+                        <button className="w-full font-semibold bg-black  text-white px-6 py-3 rounded"  onClick={handlePaymentSuccess} >
+                          Pay 
+                        </button>
                     </div>
                 )
                 }

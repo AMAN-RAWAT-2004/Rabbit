@@ -18,7 +18,7 @@ const OrderManagment = () => {
     },[dispatch,user,navigate])
 
     const handleStatusChange=(orderId,status)=>{
-        dispatch(updateOrderStatus({id:orderId,status}))
+        dispatch(updateOrderStatus({id:orderId,status:status}))
 
     }
     if(loading) return <p>Loading ...</p>
