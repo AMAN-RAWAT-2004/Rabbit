@@ -1,11 +1,12 @@
-import React, { useEffect } from 'react'
+import React, { useEffect, useState } from 'react'
 import { useDispatch, useSelector } from 'react-redux'
 import { useNavigate } from 'react-router-dom'
 import { fetchUserOrders } from '../redux/Slice/orderSlice'
+import { CiSearch } from "react-icons/ci";
 
 const MyOrderPage = () => {
 
-    
+    const [orderValue,setOrderValue]=useState('')
     const navigate=useNavigate()
         const dispatch=useDispatch();
         const {orders,loading,error}=useSelector((state)=>state.orders)
@@ -13,14 +14,49 @@ const MyOrderPage = () => {
         useEffect(()=>{
             dispatch(fetchUserOrders())
         },[dispatch])
+
     const handleRowClick=(orderId)=>{
         navigate(`/order/${orderId}`)
 
     }
+      const  handleSubmit=()=>{
+                
+                 navigate(`/order/${orderValue}`)
+
+    
+      }
+     
+    
     if(loading) return <p>Loading ...</p>
     if(error) return <p>Error: {error}</p>
   return (
     <div className='max-w-7xl mx-auto p-4 sm:p-6'>
+
+<div className="w-full flex justify-center items-center mt-4 mb-4">
+  <div className="flex items-center gap-3 bg-white shadow-md px-4 py-2 rounded-lg border border-gray-300 w-full max-w-md">
+
+    
+    <label className="font-medium text-gray-700 whitespace-nowrap">
+      Search
+    </label>
+
+  
+    <input
+      type="text"
+      placeholder="Enter order ID"
+      className="flex-1 bg-gray-100 px-3 py-2 rounded-lg border border-gray-300 focus:outline-none focus:border-gray-500 focus:bg-white transition"
+      onChange={(e) => setOrderValue(e.target.value)}
+    />
+
+   
+    <CiSearch
+      onClick={handleSubmit}
+      className="text-2xl text-gray-600 cursor-pointer hover:text-black transition"
+    />
+
+  </div>
+</div>
+
         <h2 className="text-xl sm:text-2xl font-bold mb-6">
             My Orders
         </h2>

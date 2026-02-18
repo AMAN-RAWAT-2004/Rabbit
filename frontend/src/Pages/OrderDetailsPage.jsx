@@ -2,10 +2,13 @@ import React, { useEffect } from 'react'
 import { useDispatch, useSelector } from 'react-redux'
 import { Link, useParams } from 'react-router-dom'
 import { fetchOrderDetails } from '../redux/Slice/orderSlice'
+import OrderStatus from './OrderStatus'
 const OrderDetailsPage = () => {
     const {id}=useParams()
     const dispatch=useDispatch();
     const {orderDetails,loading,error}=useSelector((state)=>state.orders)
+    // console.log(orderDetails);
+    
     useEffect(()=>{
         dispatch(fetchOrderDetails(id))
     },[dispatch,id])
@@ -67,7 +70,7 @@ const OrderDetailsPage = () => {
                                         <tr key={item.productId} className='border-b'>
                                             <td className='py-2 px-4 flex items-center' > 
                                                 <img src={item.image} alt={item.name} className='w-12 h-12 object-cover rounded-lg mr-4'/>
-                                                <Link to={`/product/${item.productId}`} className='text-blue-500 hover:underline'>{item.name}</Link>
+                                                <Link to={`/products/${item.productId}`} className='text-blue-500 hover:underline'>{item.name}</Link>
                                             </td>
                                             <td className="py-2 px-4 ">${item.price}</td>
                                             <td className="py-2 px-4 ">{item.quantity}</td>
@@ -77,6 +80,11 @@ const OrderDetailsPage = () => {
                                 }
                             </tbody>
                         </table>
+                        <div className='p-10 bg-gray-100 '>
+                                   <OrderStatus status={orderDetails.status}/>
+                                    
+
+                        </div>
                     </div>
                     {/* BACK TO ORDERS LINK  */}
                     <Link to='/my-orders' className='text-blue-500 hover:underline'>
