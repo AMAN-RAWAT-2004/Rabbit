@@ -19,20 +19,31 @@ export const fetchAllOrders=createAsyncThunk('adminOrders/fetchAllOrders',async(
     }
 })
 
-// ASYNCTHUNK TO update delivery status of the orders 
-
-export const updateOrderStatus=createAsyncThunk('adminOrders/updateOrderStatus',async({id,status},{rejectWithValue})=>{
+// ASYNCTHUNK FOR UPDATE ORDER STATUS
+export const updateOrderStatus = createAsyncThunk(
+  'adminOrders/updateOrderStatus',
+  async ({ orderId, status }, { rejectWithValue }) => {
     try {
-        const response=await axios.put(`${import.meta.env.VITE_BACKEND_URL}/api/admin/orders/${id}`,{status}, {
-                headers:{
-            Authorization:`Bearer ${localStorage.getItem('userToken')}`
-                }
-        })
-        return response.data;
+      const response = await axios.put(
+        `${import.meta.env.VITE_BACKEND_URL}/api/admin/orders/${orderId}/status`,
+        { status },
+        {
+          headers: {
+            Authorization: `Bearer ${localStorage.getItem("userToken")}`
+          }
+        }
+      );
+
+      return response.data;
+
     } catch (error) {
-        return rejectWithValue(error.response.data)
+      return rejectWithValue(
+        error.response?.data || { message: error.message }
+      );
     }
-})
+  }
+);
+
 
 // ASYNCTHUNK TO update delivery status of the orders 
 
@@ -74,13 +85,28 @@ const adminOrderSlice=createSlice({
         }).addCase(fetchAllOrders.rejected,(state,action)=>{
             state.loading=false;
             state.error=action.payload.message;
-        }).addCase(updateOrderStatus.fulfilled,(state,action)=>{
-            const updatedOrder=action.payload;
-            const orderIndex=state.orders.findIndex((order)=>order._id===updatedOrder._id)
-            if(orderIndex!==-1){
-                state.orders[orderIndex]=updatedOrder;
-            }
-        }).addCase(deleteOrder.fulfilled,(state,action)=>{
+        }).addCase(updateOrderStatus.pending, (state) => {
+  state.loading = true;
+  state.error = null;
+})
+.addCase(updateOrderStatus.fulfilled, (state, action) => {
+  state.loading = false;
+
+  const updatedOrder = action.payload;
+
+  const index = state.orders.findIndex(
+    order => order._id === updatedOrder._id
+  );
+
+  if (index !== -1) {
+    state.orders[index] = updatedOrder;
+  }
+})
+.addCase(updateOrderStatus.rejected, (state, action) => {
+  state.loading = false;
+  state.error = action.payload?.message;
+})
+.addCase(deleteOrder.fulfilled,(state,action)=>{
             state.orders=state.orders.filter((order)=>order._id!==action.payload)
         })
     }

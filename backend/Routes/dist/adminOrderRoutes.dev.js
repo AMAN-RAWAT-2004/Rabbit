@@ -40,60 +40,83 @@ router.get('/', protect, admin, function _callee(req, res) {
     }
   }, null, null, [[0, 7]]);
 });
-router.put('/:id', protect, admin, function _callee2(req, res) {
-  var order, updatedOrder;
+router.put('/:id/status', protect, admin, function _callee2(req, res) {
+  var status, order;
   return regeneratorRuntime.async(function _callee2$(_context2) {
     while (1) {
       switch (_context2.prev = _context2.next) {
         case 0:
           _context2.prev = 0;
-          _context2.next = 3;
-          return regeneratorRuntime.awrap(Order.findById(req.params.id).populate("user", "name"));
+          status = req.body.status;
+          _context2.next = 4;
+          return regeneratorRuntime.awrap(Order.findById(req.params.id));
 
-        case 3:
+        case 4:
           order = _context2.sent;
 
-          if (!order) {
-            _context2.next = 14;
+          if (order) {
+            _context2.next = 7;
             break;
           }
 
-          order.status = req.body.status || order.status;
-          order.isDelivered = req.body.status === "Delivered" ? true : order.isDelivered;
-          order.deliveredAt = req.body.status === "Delivered" ? Date.now() : order.deliveredAt;
-          _context2.next = 10;
+          return _context2.abrupt("return", res.status(404).json({
+            message: "Order not found"
+          }));
+
+        case 7:
+          if (!(order.currentStatus === status)) {
+            _context2.next = 9;
+            break;
+          }
+
+          return _context2.abrupt("return", res.status(400).json({
+            message: "Order already in this status"
+          }));
+
+        case 9:
+          order.currentStatus = status;
+          order.statusHistory.push({
+            status: status
+          });
+          _context2.next = 13;
           return regeneratorRuntime.awrap(order.save());
 
-        case 10:
-          updatedOrder = _context2.sent;
-          res.json(updatedOrder);
-          _context2.next = 15;
+        case 13:
+          res.status(200).json(order);
+          _context2.next = 19;
           break;
 
-        case 14:
-          res.status(404).json({
-            messgae: 'Order not found'
-          });
-
-        case 15:
-          _context2.next = 21;
-          break;
-
-        case 17:
-          _context2.prev = 17;
+        case 16:
+          _context2.prev = 16;
           _context2.t0 = _context2["catch"](0);
-          console.error(_context2.t0);
-          res.status(500).json({
-            message: 'Server Error'
+          res.status(400).json({
+            message: _context2.t0.message
           });
 
-        case 21:
+        case 19:
         case "end":
           return _context2.stop();
       }
     }
-  }, null, null, [[0, 17]]);
-});
+  }, null, null, [[0, 16]]);
+}); // router.put('/:id',protect,admin,async(req,res)=>{
+//     try {
+//         const order=await Order.findById(req.params.id).populate("user","name")
+//         if(order){
+//             order.status=req.body.status || order.status;
+//             order.isDelivered=req.body.status==="Delivered"? true : order.isDelivered;
+//             order.deliveredAt=req.body.status==="Delivered"? Date.now() : order.deliveredAt;
+//             const updatedOrder=await order.save();
+//             res.json(updatedOrder)
+//         }else{
+//             res.status(404).json({messgae:'Order not found'})
+//         }
+//     } catch (error) {
+//         console.error(error);
+//          res.status(500).json({message:'Server Error'})
+//     }
+// })
+
 router["delete"]('/:id', protect, admin, function _callee3(req, res) {
   var order;
   return regeneratorRuntime.async(function _callee3$(_context3) {

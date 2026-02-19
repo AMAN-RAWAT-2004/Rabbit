@@ -7,7 +7,7 @@ const OrderDetailsPage = () => {
     const {id}=useParams()
     const dispatch=useDispatch();
     const {orderDetails,loading,error}=useSelector((state)=>state.orders)
-    // console.log(orderDetails);
+    console.log(orderDetails);
     
     useEffect(()=>{
         dispatch(fetchOrderDetails(id))
@@ -81,7 +81,10 @@ const OrderDetailsPage = () => {
                             </tbody>
                         </table>
                         <div className='p-10 bg-gray-100 '>
-                                   <OrderStatus status={orderDetails.status}/>
+                                   <OrderStatus 
+   currentStatus={orderDetails.currentStatus}
+   history={orderDetails.statusHistory}
+/>
                                     
 
                         </div>

@@ -19,6 +19,8 @@ export const fetchUserOrders=createAsyncThunk('orders/fetchUserOrders',async(_,{
     }
 })
 
+
+
 // ASYNCTHUNK FOR FETCH  ORDERS DETAILS BY ID 
 
 export const fetchOrderDetails=createAsyncThunk('orders/fetchOrderDetails',async(orderId,{rejectWithValue})=>{
@@ -36,6 +38,8 @@ export const fetchOrderDetails=createAsyncThunk('orders/fetchOrderDetails',async
 
     }
 })
+
+
 
 const orderSlice=createSlice({
     name:'orders',
@@ -68,6 +72,7 @@ const orderSlice=createSlice({
             state.loading=false;
             state.error=action.payload.message;
         })
+
 
     }
     
