@@ -5,7 +5,7 @@ import { deleteProduct, fetchAdminProducts } from '../redux/Slice/adminProductSl
 const ProductManagment = () => {
     const dispatch =useDispatch()
     const {products,loading,error}=useSelector((state)=>state.adminProducts)
-
+ 
         useEffect(()=>{
             dispatch(fetchAdminProducts())
         },[dispatch])
