@@ -223,7 +223,7 @@ const Checkout = () => {
                   </button>
                 ) : (
                   <div className="w-full">
-                    <h3 className="text-lg mb-4">Pay with Razorpay</h3>
+                    <h3 className="text-lg mb-4">Pay with PayPal</h3>
 
                     <PaypalButton
                       amount={cart.totalPrice}
